@@ -385,12 +385,26 @@ $.extend(Selectize.prototype, {
 	},
 
 	/**
+	 * Trigger Native browser event.
+	 */
+	triggerNativeEvent: function(el, eventName){
+    if (el.fireEvent) { // < IE9
+      (el.fireEvent('on' + eventName));
+    } else {
+      var evt = document.createEvent('Events');
+      evt.initEvent(eventName, true, false);
+      el.dispatchEvent(evt);
+    }
+	},
+
+	/**
 	 * Triggered when the value of the control has been changed.
 	 * This should propagate the event to the original DOM
 	 * input / select element.
 	 */
 	onChange: function() {
 		this.$input.trigger('change');
+		this.triggerNativeEvent(this.$input.get(0), 'change');
 	},
 
 	/**
